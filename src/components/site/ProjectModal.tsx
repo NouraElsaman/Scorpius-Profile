@@ -81,6 +81,15 @@ type Props = {
   total?: number;
 };
 
+const getImgSrc = (src: any): string | undefined => {
+  if (!src) return undefined;
+  if (typeof src === "string") return src;
+  if (typeof src === "object") {
+    return src.default || src.url || src.src || undefined;
+  }
+  return undefined;
+};
+
 /* ═══════════════════════════════════════════════════════════════════════
    PROJECT MODAL
    ═══════════════════════════════════════════════════════════════════════ */
@@ -116,14 +125,14 @@ export function ProjectModal({ project, onClose, onPrev, onNext, onSelectProject
     const arCaptions = ar?.gallery ?? [];
     const base = project.gallery.map((g, i) => ({
       caption : (isAr && arCaptions[i]) || g.caption,
-      src     : g.src,
+      src     : getImgSrc(g.src),
       lang    : g.lang,
     }));
     const preferred = isAr ? "ar" : "en";
     const matched = base.filter((g) => g.lang === preferred && g.src);
     const others  = base.filter((g) => g.lang !== preferred && g.src);
     return [
-      { caption: isAr ? "الغلاف" : "Cover", src: project.cover },
+      { caption: isAr ? "الغلاف" : "Cover", src: getImgSrc(project.cover) },
       ...[...matched, ...others],
     ];
   }, [project, isAr, ar]);
@@ -346,7 +355,7 @@ export function ProjectModal({ project, onClose, onPrev, onNext, onSelectProject
                 <AnimatePresence mode="wait">
                   <motion.img
                     key={activeImg}
-                    src={active.src ?? project.cover}
+                    src={getImgSrc(active.src) ?? getImgSrc(project.cover)}
                     alt={`${project.title} — ${active.caption}`}
                     loading="lazy"
                     className="h-full w-full object-cover"
@@ -431,8 +440,9 @@ export function ProjectModal({ project, onClose, onPrev, onNext, onSelectProject
             {galleryItems.length > 1 && (
               <div className="px-6 sm:px-12 pb-4">
                 <div className="flex gap-3 overflow-x-auto scorpius-scroll pb-2">
-                  {galleryItems.map((g, i) =>
-                    g.src ? (
+                  {galleryItems.map((g, i) => {
+                    const thumbSrc = getImgSrc(g.src);
+                    return thumbSrc ? (
                       <button
                         key={i}
                         onClick={() => { setActiveImg(i); }}
@@ -447,10 +457,10 @@ export function ProjectModal({ project, onClose, onPrev, onNext, onSelectProject
                         onMouseEnter={(e) => { if (i !== activeImg) (e.currentTarget as HTMLElement).style.opacity = "1"; }}
                         onMouseLeave={(e) => { if (i !== activeImg) (e.currentTarget as HTMLElement).style.opacity = "0.6"; }}
                       >
-                        <img src={g.src} alt={g.caption} loading="lazy" className="h-full w-full object-cover" />
+                        <img src={thumbSrc} alt={g.caption} loading="lazy" className="h-full w-full object-cover" />
                       </button>
-                    ) : null,
-                  )}
+                    ) : null;
+                  })}
                 </div>
               </div>
             )}
@@ -796,8 +806,8 @@ export function ProjectModal({ project, onClose, onPrev, onNext, onSelectProject
               }}
             >
               <img
-                key={`lb-${imgKey}`}
-                src={active.src}
+                key={`lb-${activeImg}`}
+                src={getImgSrc(active.src)}
                 alt={active.caption}
                 onClick={() => setZoomed((z) => !z)}
                 className={`max-h-full max-w-full rounded-2xl object-contain animate-fade-in transition-transform duration-300 ${zoomed ? "scale-[1.75] cursor-zoom-out" : "cursor-zoom-in"}`}

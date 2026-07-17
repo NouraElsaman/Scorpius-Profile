@@ -699,6 +699,15 @@ function Projects({ onOpen }: { onOpen: (p: Project) => void }) {
   );
 }
 
+const getImgSrc = (src: any): string | undefined => {
+  if (!src) return undefined;
+  if (typeof src === "string") return src;
+  if (typeof src === "object") {
+    return src.default || src.url || src.src || undefined;
+  }
+  return undefined;
+};
+
 function ProjectCard({
   project: p,
   onOpen,
@@ -716,12 +725,13 @@ function ProjectCard({
   const [imgLoaded, setImgLoaded] = useState(false);
   const [hovered, setHovered] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
+  const imgSrc = getImgSrc(p.cover);
 
   useEffect(() => {
     if (imgRef.current && imgRef.current.complete) {
       setImgLoaded(true);
     }
-  }, [p.cover]);
+  }, [imgSrc]);
 
   // Outer article: CSS reveal entrance. Inner motion.article: Framer hover lift.
   const setReveal = (el: HTMLElement | null) => {
@@ -746,7 +756,13 @@ function ProjectCard({
         transition={springSnappy}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
+        onClick={() => { if (!disabled) onOpen(p); }}
+        onKeyDown={(e) => { if (!disabled && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); onOpen(p); } }}
+        role={disabled ? undefined : "button"}
+        tabIndex={disabled ? undefined : 0}
+        aria-label={disabled ? undefined : `View ${p.title} case study`}
         style={{
+          cursor: disabled ? "default" : "pointer",
           borderColor: hovered 
             ? `hsla(${accent}, 50%, 50%, 0.38)` 
             : `hsla(${accent}, 30%, 50%, 0.12)`,
@@ -757,10 +773,10 @@ function ProjectCard({
         }}
       >
         <div className="relative aspect-[16/10] overflow-hidden">
-          {p.cover ? (
+          {imgSrc ? (
             <img
               ref={imgRef}
-              src={p.cover}
+              src={imgSrc}
               alt={`${p.title} cover`}
               loading="lazy"
               className={`img-fade h-full w-full object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] ${imgLoaded ? "is-loaded" : ""}`}
@@ -843,7 +859,7 @@ function ProjectCard({
             </span>
           ) : (
             <button
-              onClick={() => onOpen(p)}
+              onClick={(e) => { e.stopPropagation(); onOpen(p); }}
               aria-label={`View ${p.title} case study`}
               className="link-underline mt-6 inline-flex items-center gap-2 self-start text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
               style={{
