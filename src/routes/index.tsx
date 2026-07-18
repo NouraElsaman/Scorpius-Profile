@@ -28,6 +28,7 @@ import wordmarkLight from "@/assets/scorpius-wordmark-light.png";
 import markLight from "@/assets/scorpius-mark-light.png";
 import { projects, type Project } from "@/data/projects";
 import { ProjectModal } from "@/components/site/ProjectModal";
+import { AiAssistant } from "@/components/site/AiAssistant";
 import { ThemeToggle } from "@/components/site/ThemeToggle";
 import { useReveal } from "@/hooks/use-reveal";
 import { useCursorLight } from "@/hooks/use-cursor-light";
@@ -72,6 +73,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const [openEntry, setOpenEntry] = useState<{ project: Project; index: number } | null>(null);
+  const [aiOpen, setAiOpen] = useState(false);
 
   const openModal = (p: Project) => {
     if (p.comingSoon) return;
@@ -96,7 +98,7 @@ function Home() {
 
         <Nav />
         <main className="relative">
-          <Hero />
+          <Hero onOpenAi={() => setAiOpen(true)} />
           <Services />
           <Projects onOpen={openModal} />
           <Process />
@@ -119,6 +121,12 @@ function Home() {
             />
           )}
         </AnimatePresence>
+
+        <AiAssistant
+          isOpen={aiOpen}
+          onClose={() => setAiOpen(false)}
+          onOpenProject={(p) => { setAiOpen(false); openModal(p); }}
+        />
       </div>
     </MotionConfig>
   );
@@ -275,9 +283,131 @@ function Nav() {
 }
 
 /* ============================================================
+   HERO LOGO (interactive AI trigger)
+   Preserves all existing visual effects and adds:
+   - pointer cursor
+   - subtle cyan glow ring on hover
+   - 1.06 scale on hover (spring)
+   - "Talk to Scorpius" tooltip
+   ============================================================ */
+function HeroLogo({
+  tilt,
+  onOpenAi,
+  mark,
+}: {
+  tilt: { x: number; y: number };
+  onOpenAi: () => void;
+  mark: string;
+}) {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <div
+      className="relative animate-scale-in"
+      style={{
+        transform: `translate3d(${tilt.x * 5}px, ${tilt.y * 5}px, 0) rotateY(${tilt.x * 3}deg) rotateX(${tilt.y * -3}deg)`,
+        transition: "transform 0.85s cubic-bezier(0.16, 1, 0.3, 1)",
+        transformStyle: "preserve-3d",
+        willChange: "transform",
+      }}
+    >
+      {/* Tooltip */}
+      <AnimatePresence>
+        {hovered && (
+          <motion.div
+            key="logo-tooltip"
+            initial={{ opacity: 0, y: 6, scale: 0.94 }}
+            animate={{ opacity: 1, y: 0, scale: 1, transition: springSnappy }}
+            exit={{ opacity: 0, y: 4, scale: 0.94, transition: { duration: 0.15 } }}
+            className="pointer-events-none absolute -top-11 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-1.5 text-[11px] font-medium tracking-wide"
+            style={{
+              background: "var(--glass-bg)",
+              backdropFilter: "blur(16px)",
+              border: "1px solid var(--border-accent)",
+              color: "var(--cyan)",
+              boxShadow: "0 4px 16px -4px rgba(33,184,187,0.28)",
+              zIndex: 20,
+            }}
+          >
+            ✦ Talk to Scorpius
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Hover glow ring */}
+      <motion.div
+        animate={{
+          opacity: hovered ? 1 : 0,
+          scale: hovered ? 1.12 : 1,
+        }}
+        transition={springSnappy}
+        className="pointer-events-none absolute inset-0 rounded-full"
+        style={{
+          boxShadow: "0 0 40px 12px rgba(33,184,187,0.32), 0 0 80px 20px rgba(33,184,187,0.14)",
+          zIndex: 0,
+        }}
+      />
+
+      {/* Clickable button wrapping the logo — no DOM change to the logo itself */}
+      <motion.button
+        onClick={onOpenAi}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        animate={{ scale: hovered ? 1.06 : 1 }}
+        transition={springSnappy}
+        aria-label="Open Scorpius AI Assistant"
+        className="relative block cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--background)] rounded-full"
+        style={{ background: "none", border: "none", padding: 0 }}
+      >
+        {/* Floating logo wrapper (6s float) */}
+        <div
+          className="animate-logo-float relative"
+          style={{
+            filter:
+              "drop-shadow(0 3px 12px rgba(0,0,0,0.65)) drop-shadow(0 20px 48px rgba(33,184,187,0.38)) drop-shadow(0 0 70px rgba(33,184,187,0.18))",
+          }}
+        >
+          {/* Ground reflection — casting light downward */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -bottom-7 left-1/2 -translate-x-1/2"
+            style={{
+              width: "75%",
+              height: "22px",
+              background: "radial-gradient(ellipse at center, rgba(33,184,187,0.28) 0%, transparent 75%)",
+              filter: "blur(9px)",
+            }}
+          />
+
+          {/* Overflow hidden container for sweep clipping */}
+          <div className="relative overflow-hidden rounded-full h-32 w-32 sm:h-44 sm:w-44">
+            <img
+              src={mark}
+              alt="SCORPIUS mark"
+              className="h-full w-full object-contain relative z-10"
+            />
+            {/* Premium light sweep (diagonal reflective pass every 9.5s) */}
+            <div
+              className="absolute inset-0 pointer-events-none mix-blend-screen animate-light-sweep z-20"
+              style={{
+                background:
+                  "linear-gradient(110deg, transparent 40%, rgba(255,255,255,0.05) 50%, transparent 60%)",
+                width: "200%",
+                height: "100%",
+                left: "-50%",
+              }}
+            />
+          </div>
+        </div>
+      </motion.button>
+    </div>
+  );
+}
+
+/* ============================================================
    HERO
    ============================================================ */
-function Hero() {
+function Hero({ onOpenAi }: { onOpenAi: () => void }) {
   const stageRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
@@ -391,56 +521,8 @@ function Hero() {
           </div>
 
           {/* Centerpiece mark — dual shadow system + ground reflection + floating logo + diagonal sweep */}
-          <div
-            className="relative animate-scale-in"
-            style={{
-              transform: `translate3d(${tilt.x * 5}px, ${tilt.y * 5}px, 0) rotateY(${tilt.x * 3}deg) rotateX(${tilt.y * -3}deg)`,
-              transition: "transform 0.85s cubic-bezier(0.16, 1, 0.3, 1)",
-              transformStyle: "preserve-3d",
-              willChange: "transform",
-            }}
-          >
-            {/* Imperceptible floating logo wrapper (6s) */}
-            <div
-              className="animate-logo-float relative"
-              style={{
-                filter:
-                  "drop-shadow(0 3px 12px rgba(0,0,0,0.65)) drop-shadow(0 20px 48px rgba(33,184,187,0.38)) drop-shadow(0 0 70px rgba(33,184,187,0.18))",
-              }}
-            >
-              {/* Ground reflection — casting light downward */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute -bottom-7 left-1/2 -translate-x-1/2"
-                style={{
-                  width: "75%",
-                  height: "22px",
-                  background: "radial-gradient(ellipse at center, rgba(33,184,187,0.28) 0%, transparent 75%)",
-                  filter: "blur(9px)",
-                }}
-              />
-              
-              {/* Overflow hidden container for sweep clipping */}
-              <div className="relative overflow-hidden rounded-full h-32 w-32 sm:h-44 sm:w-44">
-                <img
-                  src={mark}
-                  alt="SCORPIUS mark"
-                  className="h-full w-full object-contain relative z-10"
-                />
-                
-                {/* Premium light sweep (diagonal reflective pass every 9.5s) */}
-                <div
-                  className="absolute inset-0 pointer-events-none mix-blend-screen animate-light-sweep z-20"
-                  style={{
-                    background: "linear-gradient(110deg, transparent 40%, rgba(255, 255, 255, 0.05) 50%, transparent 60%)",
-                    width: "200%",
-                    height: "100%",
-                    left: "-50%",
-                  }}
-                />
-              </div>
-            </div>
-          </div>
+          {/* Now also acts as the AI assistant trigger */}
+          <HeroLogo tilt={tilt} onOpenAi={onOpenAi} mark={mark} />
 
           {/* Orbiting capability chips — depth-aware opacity + unsynchronized breathing */}
           {orbits.map(({ Icon, label, depth, delay, ...pos }, i) => {
@@ -744,12 +826,12 @@ function ProjectCard({
   return (
     <article
       ref={setReveal}
-      className="reveal-card"
+      className="reveal-card h-full"
       style={{ transitionDelay: `${Math.min(index * 70, 420)}ms` }}
     >
       <motion.article
         ref={setCard}
-        className="group card-surface cursor-light flex flex-col overflow-hidden rounded-[var(--radius-lg)]"
+        className="group card-surface cursor-light flex h-full flex-col overflow-hidden rounded-[var(--radius-lg)]"
         initial="rest"
         whileHover="hover"
         variants={projectCardVariants}
@@ -826,8 +908,8 @@ function ProjectCard({
           )}
         </div>
         <div className="relative z-10 flex flex-1 flex-col p-6">
-          <h3 style={{ color: "var(--text-primary)" }}>{p.title}</h3>
-          <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>{p.description}</p>
+          <h3 className="line-clamp-2 min-h-[2lh]" style={{ color: "var(--text-primary)" }}>{p.title}</h3>
+          <p className="mt-2 line-clamp-3 text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>{p.description}</p>
           <div className="mt-4 flex flex-wrap gap-1.5">
             {p.technologies.slice(0, 4).map((t) => (
               <motion.span
@@ -852,7 +934,7 @@ function ProjectCard({
           </div>
           {disabled ? (
             <span
-              className="mt-6 inline-flex items-center gap-2 self-start text-sm font-semibold"
+              className="mt-auto pt-6 inline-flex items-center gap-2 self-start text-sm font-semibold"
               style={{ color: "var(--text-dim)" }}
             >
               <Lock className="icon-md" strokeWidth={1.6} /> Case study in preparation
@@ -861,7 +943,7 @@ function ProjectCard({
             <button
               onClick={(e) => { e.stopPropagation(); onOpen(p); }}
               aria-label={`View ${p.title} case study`}
-              className="link-underline mt-6 inline-flex items-center gap-2 self-start text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
+              className="link-underline mt-auto pt-6 inline-flex items-center gap-2 self-start text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
               style={{
                 color: "var(--cyan)",
                 outlineColor: "var(--accent)",

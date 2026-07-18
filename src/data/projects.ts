@@ -18,7 +18,7 @@ import madarekiqArabicHero from "@/assets/madarekiq-arabic-hero.png";
 import aichatContact from "@/assets/aichat-contact.png";
 import aichatSkills from "@/assets/aichat-skills.png";
 import aichatProject from "@/assets/aichat-project.png";
-import whatsappSalesAgentHero from "@/assets/whatsapp-sales-agent-hero.jpeg";
+import whatsappSalesAgentHero from "@/assets/whatsapp-sales-agent-hero.png";
 import leadGenerationPipelineHero from "@/assets/lead-generation-pipeline-hero.png";
 import careerIntelligenceHero from "@/assets/career-intelligence-hero.png";
 import salesIntelligenceHero from "@/assets/sales-intelligence-hero.jpeg";
