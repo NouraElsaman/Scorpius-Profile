@@ -1,6 +1,27 @@
-import elraedCover from "@/assets/project-elraed.jpg";
-import manaraCover from "@/assets/project-manara.jpg";
-import bayyinahCover from "@/assets/project-bayyinah.jpg";
+import elraedLogo from "@/assets/elraed-logo.jpeg";
+import elraed1 from "@/assets/elraed-1.jpeg";
+import elraed2 from "@/assets/elraed-2.jpeg";
+import elraed3 from "@/assets/elraed-3.jpeg";
+import elraed4 from "@/assets/elraed-4.jpeg";
+import elraed5 from "@/assets/elraed-5.jpeg";
+import elraed6 from "@/assets/elraed-6.jpeg";
+import elraed7 from "@/assets/elraed-7.jpeg";
+import elraed8 from "@/assets/elraed-8.jpeg";
+import manaraLogo from "@/assets/manara-logo.png";
+import manara1 from "@/assets/manara-1.jpeg";
+import manara2 from "@/assets/manara-2.jpeg";
+import manara3 from "@/assets/manara-3.jpeg";
+import manara4 from "@/assets/manara-4.jpeg";
+import manara5 from "@/assets/manara-5.jpeg";
+import manara6 from "@/assets/manara-6.jpeg";
+import bayyinahLogo from "@/assets/bayyinah-logo.png";
+import bayyinah1 from "@/assets/bayyinah-1.png";
+import bayyinah2 from "@/assets/bayyinah-2.png";
+import bayyinah3 from "@/assets/bayyinah-3.png";
+import bayyinah4 from "@/assets/bayyinah-4.png";
+import bayyinah5 from "@/assets/bayyinah-5.png";
+import bayyinah6 from "@/assets/bayyinah-6.png";
+import bayyinah7 from "@/assets/bayyinah-7.png";
 import restro360Workflow from "@/assets/restro360-workflow.png";
 import nasmHero from "@/assets/nasm-Screenshot_1614.png";
 import nasmMap from "@/assets/nasm-Screenshot_1615.png";
@@ -1048,12 +1069,16 @@ export const projects: Project[] = [
     description:
       "An AI-powered learning companion that makes education interactive, adaptive, and personal — while keeping instructors in control of the learning path.",
     technologies: ["RAG", "Agentic AI", "LLM Orchestration", "Vector Search", "Python", "Next.js"],
-    cover: elraedCover,
+    cover: elraedLogo,
     gallery: [
-      { caption: "Student conversation view — replace with real screenshot" },
-      { caption: "Instructor dashboard — replace with real screenshot" },
-      { caption: "Adaptive quiz flow — replace with real screenshot" },
-      { caption: "Knowledge source citations — replace with real screenshot" },
+      { caption: "Learning Assistant Interface", src: elraed1 },
+      { caption: "Student Conversation View", src: elraed2 },
+      { caption: "Instructor Dashboard", src: elraed3 },
+      { caption: "Adaptive Quiz Flow", src: elraed4 },
+      { caption: "Source Citations Panel", src: elraed5 },
+      { caption: "Knowledge Base Explorer", src: elraed6 },
+      { caption: "Recommendations Feed", src: elraed7 },
+      { caption: "Analytics Overview", src: elraed8 },
     ],
     overview:
       "El Raed is an AI-powered learning assistant that makes education more interactive, adaptive and personalized for both students and instructors. It combines Retrieval-Augmented Generation with agentic reasoning so learners get accurate, source-grounded answers while instructors keep control over what is taught.",
@@ -1084,6 +1109,52 @@ export const projects: Project[] = [
       "Deeper analytics for instructors on class-wide understanding",
       "Integration with existing LMS platforms",
     ],
+    i18n: {
+      ar: {
+        tagline: "مساعد تعليمي بالذكاء الاصطناعي للتعليم الشخصي الموجَّه من المعلم.",
+        category: "الذكاء الاصطناعي",
+        overview:
+          "الرائد هو مساعد تعلّم مدعوم بالذكاء الاصطناعي يجعل التعليم أكثر تفاعلاً وتكيّفاً وتخصيصاً لكلٍّ من الطلاب والمعلمين. يجمع بين الاسترجاع المعزَّز بالتوليد والتفكير الوكيلي، بحيث يحصل المتعلمون على إجابات دقيقة مرتكزة على المصادر، بينما يحتفظ المعلمون بالسيطرة على ما يُدرَّس.",
+        problem:
+          "يحتاج الطلاب إلى شروح تتناسب مع مستواهم، وبوتيرتهم الخاصة، وفي أي وقت. ويحتاج المعلمون إلى توجيه التعلم دون الإجابة على الأسئلة المتكررة مرات لا تُعدّ، ودون التنازل عن التحكم التربوي لروبوت دردشة عام.",
+        solution:
+          "نظام RAG وكيلي مدرَّب على المناهج الخاصة بالمعلم. يجيب على الأسئلة ويبسّط المفاهيم الصعبة ويولّد اختبارات ويوصي بالموضوع التالي — مع احترام الحدود والأولويات التي يحددها المعلم.",
+        features: [
+          "إجابات مسترجَعة مرتكزة على مواد الدورة",
+          "اختبارات تكيّفية من نقاط ضعف الطالب",
+          "لوحة تحكم للمعلم لتوجيه الموضوعات والأولويات",
+          "توصيات ذكية بما يجب مراجعته لاحقاً",
+          "تفكير وكيلي متعدد الأدوار للأسئلة المعقدة",
+          "استشهادات مصدرية لكل إجابة",
+        ],
+        challenges: [
+          "الحفاظ على الإجابات داخل منهج المعلم بشكل صارم",
+          "الموازنة بين طلاقة المحادثة والدقة التربوية",
+          "تصميم معايير تقييم لنتائج التعلم المفتوحة",
+        ],
+        results: [
+          "فهم أسرع للموضوعات المعقدة من خلال شروح مبسّطة",
+          "استعادة المعلمين لساعات كانوا يقضونها في الإجابة عن الأسئلة المتكررة",
+          "مشاركة أعلى بفضل الدعم الشخصي المتاح دائماً",
+        ],
+        roadmap: [
+          "وضع التدريس الصوتي",
+          "تحليلات أعمق للمعلمين حول مستوى الفهم على مستوى الفصل",
+          "التكامل مع منصات إدارة التعلم الحالية",
+        ],
+        gallery: [
+          "واجهة المساعد التعليمي",
+          "عرض محادثة الطالب",
+          "لوحة تحكم المعلم",
+          "سير الاختبار التكيّفي",
+          "لوحة استشهادات المصادر",
+          "مستكشف قاعدة المعرفة",
+          "خلاصة التوصيات",
+          "نظرة عامة على التحليلات",
+        ],
+        cta: "لنبنِ مساعدك التعليمي الذكي القادم.",
+      },
+    },
   },
   {
     slug: "manara",
@@ -1093,12 +1164,14 @@ export const projects: Project[] = [
     description:
       "An AI guide for entrepreneurs and small business owners in Egypt — grounded in official sources, delivered in clear Egyptian Arabic.",
     technologies: ["RAG", "Semantic Search", "Arabic NLP", "LangChain", "PostgreSQL", "pgvector"],
-    cover: manaraCover,
+    cover: manaraLogo,
     gallery: [
-      { caption: "Business setup wizard — replace with real screenshot" },
-      { caption: "Egyptian-Arabic Q&A with citations — replace with real screenshot" },
-      { caption: "Tax registration walkthrough — replace with real screenshot" },
-      { caption: "Source library view — replace with real screenshot" },
+      { caption: "Business Setup Wizard", src: manara1 },
+      { caption: "Egyptian-Arabic Q&A with Citations", src: manara2 },
+      { caption: "Tax Registration Walkthrough", src: manara3 },
+      { caption: "Source Library View", src: manara4 },
+      { caption: "Regulatory Guidance Panel", src: manara5 },
+      { caption: "Step-by-Step Procedure Guide", src: manara6 },
     ],
     overview:
       "Manara is an AI assistant designed to help individuals and small business owners in Egypt understand business setup and tax regulations more easily. It delivers accurate, source-based guidance in Egyptian Arabic and offers step-by-step support that makes complex legal and business information genuinely accessible.",
@@ -1129,6 +1202,50 @@ export const projects: Project[] = [
       "Direct integration with government e-services",
       "Expert-in-the-loop review workflow",
     ],
+    i18n: {
+      ar: {
+        tagline: "مساعد ذكي للدعم التجاري والضريبي والقانوني باللهجة المصرية.",
+        category: "الذكاء الاصطناعي",
+        overview:
+          "منارة هي مساعد ذكاء اصطناعي مصمّم لمساعدة الأفراد وأصحاب الشركات الصغيرة في مصر على فهم إجراءات تأسيس الأعمال والأنظمة الضريبية بسهولة أكبر. تقدّم إرشادات دقيقة مستندة إلى المصادر الرسمية باللهجة المصرية، وتوفر دعماً خطوة بخطوة يجعل المعلومات القانونية والتجارية المعقدة في متناول الجميع فعلاً.",
+        problem:
+          "إجراءات الأعمال والضرائب والتراخيص في مصر معقدة ومتناثرة في وثائق رسمية، ونادراً ما تُكتب بالعربية اليومية التي يتحدث بها رواد الأعمال. هذا الاحتكاك يُبطئ الشركات الصغيرة أو يمنعها كلياً من التسجيل الرسمي.",
+        solution:
+          "مساعد مُعزَّز بالاسترجاع يبحث داخل المصادر المصرية الرسمية ويُجيب باللهجة المصرية، مع إمكانية تتبّع كل ادعاء إلى مصدره. كما يجمع ملفاً خفيفاً (نوع النشاط، الشركاء، الملكية الأجنبية) لتخصيص الإجابات وفق وضع المستخدم الفعلي.",
+        features: [
+          "إجابات مرتكزة على المصادر التنظيمية المصرية الرسمية",
+          "مراجع المصادر مرفقة بكل إجابة",
+          "استيعاب الملف الشخصي الموجَّه للحصول على ردود وعيّة بالسياق",
+          "إرشادات خطوة بخطوة للإجراءات الشائعة",
+          "دعم كامل للهجة المصرية العامية",
+          "تغطية الضرائب والترخيص وتأسيس الأعمال",
+        ],
+        challenges: [
+          "معالجة اللهجة المصرية العامية بدقة عالية",
+          "الحفاظ على قاعدة المعرفة محدَّثة مع التغييرات التنظيمية",
+          "الموازنة بين النبرة المحادثية والدقة القانونية",
+        ],
+        results: [
+          "اختزال الإجراءات المعقدة إلى خطوات واضحة ومتسلسلة",
+          "ثقة المؤسسين في اتخاذ القرارات بناءً على معلومات موثّقة",
+          "مسار أسرع من الفكرة إلى الشركة المسجلة رسمياً",
+        ],
+        roadmap: [
+          "توليد وثائق لأكثر الملفات شيوعاً",
+          "تكامل مباشر مع الخدمات الحكومية الإلكترونية",
+          "سير عمل مراجعة بوجود خبير بشري",
+        ],
+        gallery: [
+          "معالج إعداد الأعمال",
+          "سؤال وجواب بالعربية المصرية مع الاستشهادات",
+          "إرشادات التسجيل الضريبي",
+          "عرض مكتبة المصادر",
+          "لوحة الإرشادات التنظيمية",
+          "دليل الإجراءات خطوة بخطوة",
+        ],
+        cta: "لنبنِ مساعدك الأعمال الذكي القادم.",
+      },
+    },
   },
   {
     slug: "bayyinah",
@@ -1138,12 +1255,15 @@ export const projects: Project[] = [
     description:
       "A RAG-based legal companion that makes Egyptian law understandable across civil, criminal, family, labor, commercial, and administrative domains.",
     technologies: ["RAG", "Legal NLP", "Vector DB", "LLM Guardrails", "FastAPI", "React"],
-    cover: bayyinahCover,
+    cover: bayyinahLogo,
     gallery: [
-      { caption: "Legal Q&A view — replace with real screenshot" },
-      { caption: "Cited article and code references — replace with real screenshot" },
-      { caption: "Domain selector (family, labor, civil...) — replace with real screenshot" },
-      { caption: "Out-of-scope refusal handling — replace with real screenshot" },
+      { caption: "Legal Q&A Interface", src: bayyinah1 },
+      { caption: "Cited Articles & Code References", src: bayyinah2 },
+      { caption: "Domain Selector", src: bayyinah3 },
+      { caption: "Out-of-Scope Refusal Handling", src: bayyinah4 },
+      { caption: "Source-Grounded Answer View", src: bayyinah5 },
+      { caption: "Legal Coverage Overview", src: bayyinah6 },
+      { caption: "Conversational Legal Guidance", src: bayyinah7 },
     ],
     overview:
       "Bayyinah is a RAG-based legal guidance system that simplifies Egyptian law across multiple sections — civil, criminal, family, labor, commercial, constitutional, procedural, and administrative. It helps civilians understand their rights while intentionally refusing questions outside its legal scope.",
@@ -1174,5 +1294,50 @@ export const projects: Project[] = [
       "Lawyer-facing research mode with deeper citations",
       "Voice interface for accessibility",
     ],
+    i18n: {
+      ar: {
+        tagline: "إرشادات قانونية بالذكاء الاصطناعي تُبسّط القانون المصري للمستخدم العادي.",
+        category: "الذكاء الاصطناعي",
+        overview:
+          "بيّنة هي نظام إرشادات قانونية مبنيّ على الاسترجاع المعزَّز بالتوليد (RAG)، يُبسّط القانون المصري عبر أقسام متعددة — المدني والجنائي والأسرة والعمل والتجاري والدستوري والإجرائي والإداري. يساعد المواطنين على فهم حقوقهم، مع رفض متعمَّد للأسئلة الخارجة عن نطاقه القانوني.",
+        problem:
+          "نادراً ما يعرف الناس حقوقهم إلا حين يحتاجونها، والنصوص القانونية مكتوبة للمحامين لا للمواطنين. إما أن تهلوس روبوتات الدردشة العامة في المشورة القانونية، أو تجيب على أسئلة لا ينبغي لها المساس بها.",
+        solution:
+          "نظام مُعزَّز بالاسترجاع مُرتكز بصرامة على المصادر القانونية المصرية، مع توجيه على مستوى المجال، واستشهادات على مستوى المادة، وضوابط صارمة تُبقي المساعد داخل نطاقه القانوني المحدد.",
+        features: [
+          "تغطية 8 فروع رئيسية من القانون المصري",
+          "استشهادات على مستوى المادة لكل تصريح قانوني",
+          "ضوابط ترفض الأسئلة الخارجة عن النطاق بأسلوب لائق",
+          "شروح بلغة بسيطة للحقوق والإجراءات",
+          "استرجاع واعٍ بالمجال لضمان الدقة",
+          "واجهة محادثة باللهجة المصرية العربية",
+        ],
+        challenges: [
+          "ضمان أن تكون الرفوضات مفيدة لا مُقصِّرة",
+          "منع التعميم بعيداً عن المصادر المستشهَد بها",
+          "نمذجة القانون كمعرفة منظمة وقابلة للاسترجاع",
+        ],
+        results: [
+          "يحصل المواطنون على إجابات واضحة موثّقة بدلاً من التخمين",
+          "سلوك متسق عبر جميع المجالات القانونية المدعومة",
+          "بديل موثوق ومرتكز على المصادر لروبوتات الدردشة العامة",
+        ],
+        roadmap: [
+          "بحث تاريخ القضايا مع إخفاء الهوية",
+          "وضع بحثي للمحامين مع استشهادات أعمق",
+          "واجهة صوتية للوصول الشامل",
+        ],
+        gallery: [
+          "واجهة سؤال وجواب قانوني",
+          "المواد والمراجع القانونية المستشهَد بها",
+          "محدد المجال القانوني",
+          "معالجة الرفض خارج النطاق",
+          "عرض الإجابة المرتكزة على المصدر",
+          "نظرة عامة على التغطية القانونية",
+          "الإرشاد القانوني التحادثي",
+        ],
+        cta: "لنبنِ نظام إرشادات قانونية موثوقاً ومرتكزاً على المصادر.",
+      },
+    },
   },
 ];

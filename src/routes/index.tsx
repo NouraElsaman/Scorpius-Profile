@@ -82,12 +82,19 @@ function Home() {
   };
 
   const navigateTo = (idx: number) => {
-    const p = projects[idx];
-    if (p && !p.comingSoon) setOpenEntry({ project: p, index: idx });
+    const total = projects.length;
+    // Wrap the index circularly
+    const wrapped = ((idx % total) + total) % total;
+    const p = projects[wrapped];
+    // Skip comingSoon entries by continuing in the same direction
+    if (p && !p.comingSoon) {
+      setOpenEntry({ project: p, index: wrapped });
+    } else {
+      // Determine direction: if idx > current go forward, else backward
+      const direction = idx >= (openEntry?.index ?? 0) ? 1 : -1;
+      navigateTo(wrapped + direction);
+    }
   };
-
-  const canPrev = openEntry !== null && openEntry.index > 0;
-  const canNext = openEntry !== null && openEntry.index < projects.length - 1;
 
   return (
     <MotionConfig reducedMotion="user">
@@ -113,8 +120,8 @@ function Home() {
               key={openEntry.project.slug}
               project={openEntry.project}
               onClose={() => setOpenEntry(null)}
-              onPrev={canPrev ? () => navigateTo(openEntry!.index - 1) : undefined}
-              onNext={canNext ? () => navigateTo(openEntry!.index + 1) : undefined}
+              onPrev={() => navigateTo((openEntry!.index - 1))}
+              onNext={() => navigateTo((openEntry!.index + 1))}
               onSelectProject={openModal}
               currentIndex={openEntry.index}
               total={projects.length}
@@ -489,7 +496,7 @@ function Hero({ onOpenAi }: { onOpenAi: () => void }) {
             className="pointer-events-none absolute left-1/2 top-1/2 h-[260px] w-[260px] -translate-x-1/2 -translate-y-1/2 rounded-full sm:h-[340px] sm:w-[340px]"
             style={{
               transform: `translate3d(calc(-50% + ${tilt.x * 4}px), calc(-50% + ${tilt.y * 4}px), 0)`,
-              transition: "transform 0.85s cubic-bezier(0.16, 1, 0.3, 1)",
+              transition: "transform 0.9s cubic-bezier(0.22, 1, 0.36, 1)",
             }}
           >
             <div
@@ -508,7 +515,7 @@ function Hero({ onOpenAi }: { onOpenAi: () => void }) {
             className="pointer-events-none absolute left-1/2 top-1/2 h-[180px] w-[180px] -translate-x-1/2 -translate-y-1/2 rounded-full sm:h-[240px] sm:w-[240px]"
             style={{
               transform: `translate3d(calc(-50% + ${tilt.x * -2.5}px), calc(-50% + ${tilt.y * -2.5}px), 0)`,
-              transition: "transform 0.85s cubic-bezier(0.16, 1, 0.3, 1)",
+              transition: "transform 1.0s cubic-bezier(0.22, 1, 0.36, 1)",
             }}
           >
             <div
@@ -536,7 +543,7 @@ function Hero({ onOpenAi }: { onOpenAi: () => void }) {
                   ...pos,
                   opacity: depthOpacity,
                   transform: `translate3d(${tilt.x * Math.max(-10, Math.min(10, depth * 0.38))}px, ${tilt.y * Math.max(-10, Math.min(10, depth * 0.38))}px, 0)`,
-                  transition: "transform 0.85s cubic-bezier(0.16, 1, 0.3, 1)",
+                  transition: `transform ${0.85 + Math.abs(depth) * 0.008}s cubic-bezier(0.22, 1, 0.36, 1)`,
                 }}
               >
                 <div
@@ -1329,18 +1336,22 @@ function CountUp({ value }: { value: string }) {
   useEffect(() => {
     const el = elementRef.current;
     if (!el) return;
-    
+
+    // Create observer exactly once ([] deps). Unobserve after first trigger
+    // so it never fires again — fixes the Hero re-render cascade on scroll.
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && !triggered) {
+        if (entries[0].isIntersecting) {
           setTriggered(true);
+          observer.unobserve(el);
         }
       },
       { threshold: 0.1 }
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [triggered]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!triggered) return;
